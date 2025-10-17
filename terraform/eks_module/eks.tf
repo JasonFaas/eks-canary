@@ -1,15 +1,6 @@
-module "eks" {
-  source = "./eks_module/"
-}
-module "vpc" {
-  source = "./vpc_module/"
-}
+data "aws_lambda_functions" "all_nested" {
 
-output "nested_info" {
-    value = module.eks.Lambda_Function_Names_nested
 }
-
-
 
 # EKS IAM roles
 data "aws_iam_policy_document" "eks_assume_role" {
@@ -73,10 +64,10 @@ resource "aws_eks_cluster" "this" {
   role_arn = aws_iam_role.eks_cluster.arn
 
   vpc_config {
-    subnet_ids              = [module.vpc.subnet_public_a_id, module.vpc.subnet_public_b_id]
+    subnet_ids              = [var.module_vpc_subnet_public_a_id, var.module_vpc_subnet_public_b_id]
     endpoint_public_access  = true
     endpoint_private_access = false
-    security_group_ids      = [module.vpc.aws_sg_eks_cluster_id]
+    security_group_ids      = [var.aws_sg_eks_cluster_id]
   }
 
   depends_on = [
@@ -90,7 +81,7 @@ resource "aws_eks_node_group" "ng_a" {
   cluster_name    = aws_eks_cluster.this.name
   node_group_name = "ng-a"
   node_role_arn   = aws_iam_role.nodes.arn
-  subnet_ids      = [module.vpc.subnet_public_a_id]
+  subnet_ids      = [var.module_vpc_subnet_public_a_id]
 
   scaling_config {
     desired_size = 1
@@ -112,7 +103,7 @@ resource "aws_eks_node_group" "ng_b" {
   cluster_name    = aws_eks_cluster.this.name
   node_group_name = "ng-b"
   node_role_arn   = aws_iam_role.nodes.arn
-  subnet_ids      = [module.vpc.subnet_public_b_id]
+  subnet_ids      = [var.module_vpc_subnet_public_b_id]
 
   scaling_config {
     desired_size = 1
@@ -130,9 +121,6 @@ resource "aws_eks_node_group" "ng_b" {
   ]
 }
 
-output "node_group_names" {
-  value = [aws_eks_node_group.ng_a.node_group_name, aws_eks_node_group.ng_b.node_group_name]
-}
 
 # Network Load Balancer for nginx service
 resource "kubernetes_service" "nginx" {
@@ -163,6 +151,16 @@ output "nginx_service_url" {
   value = "http://${kubernetes_service.nginx.status.0.load_balancer.0.ingress.0.hostname}"
   description = "URL to access nginx service via NLB"
 }
+
+output "node_group_names" {
+  value = [aws_eks_node_group.ng_a.node_group_name, aws_eks_node_group.ng_b.node_group_name]
+}
+
+output "Lambda_Function_Names_nested" {
+  value = data.aws_lambda_functions.all_nested.function_names
+}
+
+
 
 output "service_access_instructions" {
   value = <<-EOT
