@@ -1,3 +1,11 @@
+module "eks" {
+  source = "./eks_module/"
+}
+
+output "nested_info" {
+    value = module.eks.Lambda_Function_Names_nested
+}
+
 
 # Minimal VPC with 2 public subnets across 2 AZs
 resource "aws_vpc" "eks" {
