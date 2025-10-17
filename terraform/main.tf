@@ -205,12 +205,50 @@ resource "aws_eks_node_group" "ng_b" {
   ]
 }
 
+output "node_group_names" {
+  value = [aws_eks_node_group.ng_a.node_group_name, aws_eks_node_group.ng_b.node_group_name]
+}
+
+# Network Load Balancer for nginx service
+resource "kubernetes_service" "nginx" {
+  metadata {
+    name = "nginx-service"
+    annotations = {
+      "service.beta.kubernetes.io/aws-load-balancer-type" = "nlb"
+      "service.beta.kubernetes.io/aws-load-balancer-scheme" = "internet-facing"
+    }
+  }
+  spec {
+    selector = {
+      app = "nginx-app"
+    }
+    port {
+      port        = 80
+      target_port = 80
+    }
+    type = "LoadBalancer"
+  }
+}
+
 output "cluster_name" {
   value = aws_eks_cluster.this.name
 }
 
-output "node_group_names" {
-  value = [aws_eks_node_group.ng_a.node_group_name, aws_eks_node_group.ng_b.node_group_name]
+output "nginx_service_url" {
+  value = "http://${kubernetes_service.nginx.status.0.load_balancer.0.ingress.0.hostname}"
+  description = "URL to access nginx service via NLB"
+}
+
+output "service_access_instructions" {
+  value = <<-EOT
+    Access the nginx service at: http://${kubernetes_service.nginx.status.0.load_balancer.0.ingress.0.hostname}
+    
+    The Network Load Balancer will automatically route traffic to your nginx pods.
+    No need to worry about individual node IPs or NodePorts!
+    
+    Note: It may take a few minutes for the LoadBalancer to get an external IP.
+    Check with: kubectl get svc nginx-service
+  EOT
 }
 
 
