@@ -6,7 +6,7 @@ metadata:
   name: nginx-index
 data:
   index.html: |
-    <h1>Hello from Kubernetes ${K8S_VERSION}!</h1>
+    <h1>Hello from Kubernetes 1.32!</h1>
     <p>Served by nginx in a Pod.</p>
 ---
 apiVersion: apps/v1
@@ -14,7 +14,7 @@ kind: Deployment
 metadata:
   name: nginx-deploy
 spec:
-  replicas: 1
+  replicas: 6
   selector:
     matchLabels:
       app: nginx-app
