@@ -2,23 +2,6 @@ module "vpc" {
   source = "./vpc_module/"
 }
 
-locals {
-  cluster_info = {
-    blue = {
-      cluster_name = "eks-canary"
-      version  = "1.33"
-    }
-    green = {
-      cluster_name = "eks-canary-132"
-      version  = "1.32"
-    }
-    # purple = {
-    #   cluster_name = "eks-canary-134"
-    #   version  = "1.34"
-    # }
-  }
-}
-
 module "eks" {
   for_each = local.cluster_info
 
