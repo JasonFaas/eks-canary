@@ -9,11 +9,11 @@ locals {
       version  = "1.33"
     }
     # green = {
-    #   project_name = "eks-canary-132"
+    #   cluster_name = "eks-canary-132"
     #   version  = "1.32"
     # }
     # purple = {
-    #   project_name = "eks-canary-134"
+    #   cluster_name = "eks-canary-134"
     #   version  = "1.34"
     # }
   }
@@ -27,8 +27,12 @@ module "eks" {
   aws_sg_eks_cluster_id = module.vpc.aws_sg_eks_cluster_id
   module_vpc_subnet_public_a_id = module.vpc.subnet_public_a_id
   module_vpc_subnet_public_b_id = module.vpc.subnet_public_b_id
+
   cluster_name = each.value.cluster_name
   cluster_version = each.value.version
+
+  aws_eks_cluster_role_arn = module.vpc.aws_eks_cluster_role_arn
+  aws_eks_node_role_arn = module.vpc.aws_eks_node_role_arn
 }
 
 # output "nested_info" {

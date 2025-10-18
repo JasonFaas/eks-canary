@@ -23,3 +23,15 @@ variable "cluster_version" {
   description = "Version of the EKS cluster"
   type        = string
 }
+
+# aws_eks_cluster_role_arn
+variable "aws_eks_cluster_role_arn" {
+  description = "ARN of the EKS cluster role"
+  type        = string
+} 
+
+variable "aws_eks_node_role_arn" {
+  description = "ARN of the EKS node role"
+  type        = string
+}
+  
