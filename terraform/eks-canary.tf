@@ -8,10 +8,10 @@ locals {
       cluster_name = "eks-canary"
       version  = "1.33"
     }
-    # green = {
-    #   cluster_name = "eks-canary-132"
-    #   version  = "1.32"
-    # }
+    green = {
+      cluster_name = "eks-canary-132"
+      version  = "1.32"
+    }
     # purple = {
     #   cluster_name = "eks-canary-134"
     #   version  = "1.34"
