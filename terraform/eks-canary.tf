@@ -31,26 +31,6 @@ module "eks" {
   cluster_version = each.value.version
 }
 
-output "nested_info" {
-    value = module.eks.Lambda_Function_Names_nested
-}
-
-
-
-
-output "cluster_name" {
-  value = module.eks.cluster_name
-}
-
-output "nginx_service_url" {
-  value = module.eks.nginx_service_url
-  description = "URL to access nginx service via NLB"
-}
-
-output "node_group_names" {
-  value = module.eks.node_group_names
-}
-
-output "service_access_instructions" {
-  value = module.eks.service_access_instructions
-}
+# output "nested_info" {
+#     value = module.eks["blue"].Lambda_Function_Names_nested
+# }
