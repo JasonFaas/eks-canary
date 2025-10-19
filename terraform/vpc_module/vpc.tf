@@ -7,11 +7,17 @@ resource "aws_vpc" "eks" {
   tags = {
     Name = "eks-canary-vpc"
   }
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "aws_internet_gateway" "eks" {
   vpc_id = aws_vpc.eks.id
   tags = { Name = "eks-canary-igw" }
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "aws_subnet" "public_a" {
@@ -20,6 +26,9 @@ resource "aws_subnet" "public_a" {
   availability_zone       = "us-west-2a"
   map_public_ip_on_launch = true
   tags = { Name = "eks-public-a" }
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "aws_subnet" "public_b" {
@@ -28,6 +37,9 @@ resource "aws_subnet" "public_b" {
   availability_zone       = "us-west-2b"
   map_public_ip_on_launch = true
   tags = { Name = "eks-public-b" }
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "aws_route_table" "public" {
