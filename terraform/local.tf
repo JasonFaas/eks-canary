@@ -7,16 +7,19 @@ locals {
       cluster_name = "eks-canary"
       version  = "1.33"
       weight = 10
+      lb_created = true
     }
     green = {
       cluster_name = "eks-canary-132"
       version  = "1.32"
       weight = 90
+      lb_created = true
     }
     purple = {
       cluster_name = "eks-canary-134"
       version  = "1.34"
       weight = 0
+      lb_created = true
     }
   }
 

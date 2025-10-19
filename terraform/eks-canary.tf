@@ -16,10 +16,13 @@ module "eks" {
 
   aws_eks_cluster_role_arn = module.vpc.aws_eks_cluster_role_arn
   aws_eks_node_role_arn = module.vpc.aws_eks_node_role_arn
+
+  lb_created = each.value.lb_created
 }
 
 module "route53" {
-  for_each = local.cluster_info
+  for_each = { for k, v in local.cluster_info : k => v if v.lb_created == true }
+  # for_each = local.cluster_info
   
   source = "./module_route53/"
 

@@ -11,6 +11,10 @@ resource "aws_eks_cluster" "this" {
     endpoint_private_access = false
     security_group_ids      = [var.aws_sg_eks_cluster_id]
   }
+
+  lifecycle { 
+    prevent_destroy = true # Override as needed after all Load Balancers are kubectl deleted
+  }
 }
 
 # Node groups in different AZs with minimal instance types

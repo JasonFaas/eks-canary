@@ -34,4 +34,10 @@ variable "aws_eks_node_role_arn" {
   description = "ARN of the EKS node role"
   type        = string
 }
+
+# lb_created
+variable "lb_created" {
+  description = "Whether the LoadBalancer was created"
+  type        = bool
+}
   

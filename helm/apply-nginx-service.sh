@@ -6,7 +6,7 @@
 echo "Applying nginx service to EKS cluster..."
 
 # Apply the nginx service
-kubectl apply -f nginx-service.yaml
+kubectl apply -f hello_world-LoadBalancer.yaml
 
 echo "Waiting for LoadBalancer to get external IP..."
 
