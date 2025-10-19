@@ -6,17 +6,18 @@ locals {
     blue = {
       cluster_name = "eks-canary"
       version  = "1.33"
-      weight = 66
+      weight = 10
     }
     green = {
       cluster_name = "eks-canary-132"
       version  = "1.32"
-      weight = 33
+      weight = 90
     }
-    # purple = {
-    #   cluster_name = "eks-canary-134"
-    #   version  = "1.34"
-    # }
+    purple = {
+      cluster_name = "eks-canary-134"
+      version  = "1.34"
+      weight = 0
+    }
   }
 
   existing_zone_id = "Z06622771EG9CWRHZ6QQ6" # jasonfaas.xyz

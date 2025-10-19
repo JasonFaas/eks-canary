@@ -23,6 +23,7 @@ resource "aws_route53_health_check" "all" {
 
 # Weighted routing records for canary deployment
 resource "aws_route53_record" "app_weighted" {
+  count = var.routing_weight > 0 ? 1 : 0
   zone_id = var.hosted_zone_id
   name    = "${var.subdomain}.${var.hosted_zone_name}"
   type    = "A"
